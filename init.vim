@@ -190,14 +190,14 @@ function! CS()
     endif
   endwhile
 endfunction
-command CS call CS()
+command! CS call CS()
 
 " Run ffbuild for recipe that is being edited
 function! FFBuild()
   let recipe = expand('%:p:h:t')
   execute "!ffbuild " . recipe
 endfunction
-command FFBuild call FFBuild()
+command! FFBuild call FFBuild()
 nmap <M-b> :FFBuild<CR>
 
 " Deploy current recipe to AXIS_TARGET_IP
@@ -209,5 +209,23 @@ function! Deploy()
     execute "!devtool deploy-target --no-check-space " . recipe . " root@" . $AXIS_TARGET_IP
   endif
 endfunction
-command Deploy call Deploy()
+command! Deploy call Deploy()
 nmap <M-d> :Deploy<CR>
+
+" Run gitk --all on folder where current open file is located
+function! Gk()
+  let dir = expand('%:p:h')
+  execute 'cd ' . dir
+  execute '!gitk --all'
+  execute 'cd -'
+endfunction
+command! Gk call Gk()
+
+" Call git pull --rebase in folder where current open file is located
+function! Gpr()
+  let dir = expand('%:p:h')
+  execute 'cd ' . dir
+  execute '!git pull --rebase'
+  execute 'cd -'
+endfunction
+command! Gpr call Gpr()
