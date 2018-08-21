@@ -200,13 +200,23 @@ endfunction
 command! FFBuild call FFBuild()
 nmap <M-b> :FFBuild<CR>
 
-" Deploy current recipe to AXIS_TARGET_IP
-function! Deploy()
+" Deploy current recipe using devtool to AXIS_TARGET_IP (NOT USED)
+function! DeployTarget()
   if $AXIS_TARGET_IP == ""
     echo "ERROR: AXIS_TARGET_IP not set"
   else
     let recipe = expand('%:p:h:t')
     execute "!devtool deploy-target --no-check-space " . recipe . " root@" . $AXIS_TARGET_IP
+  endif
+endfunction
+
+" Deploy current recipe using ffbuild to AXIS_TARGET_IP
+function! Deploy()
+  if $AXIS_TARGET_IP == ""
+    echo "ERROR: AXIS_TARGET_IP not set"
+  else
+    let recipe = expand('%:p:h:t')
+    execute "!ffbuild " . recipe . " --deploy root@" . $AXIS_TARGET_IP
   endif
 endfunction
 command! Deploy call Deploy()
