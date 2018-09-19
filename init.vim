@@ -27,8 +27,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tomtom/tcomment_vim'
 
 " Snipping - Automatic completion of commonly typed things (class, if, for)
-Plug 'sirver/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'sirver/ultisnips'
+" Plug 'honza/vim-snippets'
 
 " Nerdtree - Nice directory visualizer
 Plug 'scrooloose/nerdtree'
@@ -42,6 +42,10 @@ Plug 'tpope/vim-fugitive'
 " Table mode
 Plug 'dhruvasagar/vim-table-mode'
 
+" Ez window swapping
+" Keys - <leader>ww in window 1, same in window 2 to swap the windows
+Plug 'wesQ3/vim-windowswap'
+
 " Might want in the future
 " tpope/vim-surround For surrounding words with anything ("")
 " airblade/vim-gitgutter For getting notifications which lines you've changed in a git repo
@@ -52,7 +56,7 @@ call plug#end()
 source ~/.config/nvim/cscope_maps.vim
 set cscoperelative "Use relative paths based on the location of cscope.out
 
-" Misc -----------------------------------------------
+" General vim settings -----------------------------------------------
 syntax enable
 set termguicolors
 tnoremap <Esc> <C-\><C-n>				"For escaping out of the terminal
@@ -64,7 +68,8 @@ set tabstop=4 shiftwidth=4
 set nowrap
 set encoding=utf8						"Needed to show glyphs
 noremap <silent> <c-c> :noh<cr><esc>	"Remove search highlighting when hitting ctrl-c
-set diffopt=vertical
+set diffopt=vertical                    "Vertical vimdiffs
+let mapleader = ","                     "Rebind leader to , instead of \
 
 " Align blocks of text and keep them selected
 vmap < <gv
@@ -95,6 +100,9 @@ let g:airline_theme = 'material'
 let g:material_theme_style = 'palenight'
 colorscheme material
 
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%81v.\+/
+
 " Neater folding --------------------------------------
 function! NeatFoldText()
     let line = ' ' . substitute(getline(v:foldstart), '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g') . ' '
@@ -115,21 +123,26 @@ autocmd BufWinEnter ?* silent! loadview
 vmap zd zdgv
 
 " Deoplete -----------------------------------------------
-set completeopt-=preview		"Gets rid of the scratch pad thing
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
 let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang'
+set completeopt-=preview                                		" Gets rid of the scratch pad thing
+set completeopt+=longest                                        " Doesn't select the first completion item
+set completeopt+=menuone                                        " Show menu even if there's only one item
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"        " Tab completion
+inoremap <expr> j pumvisible() ? "\<C-n>" : "j"                 " Use j as down in autocomplete box
+inoremap <expr> k pumvisible() ? "\<C-p>" : "k"                 " Use k as up in autocomplete box
 
 " Neomake -----------------------------------------------
 " call neomake#configure#automake('nw', 750)
 
 " Ultisnips -----------------------------------------------
-let g:UltiSnipsSnippetsDir='/home/alex/.vim/plugged/vim-snippets/UltiSnips'
-let g:UltiSnipsSnippetDirectories=['UltiSnips']
-let g:UltiSnipsExpandTrigger='<tab>'
-let g:UltiSnipsJumpForwardTrigger='<tab>'
-let g:UltiSnipsJumpBackwardTrigger='<s-tab>'
-let g:UltiSnipsEditSplit='vertical'
+" let g:UltiSnipsSnippetsDir='/home/alex/.vim/plugged/vim-snippets/UltiSnips'
+" let g:UltiSnipsSnippetDirectories=['UltiSnips']
+" let g:UltiSnipsExpandTrigger='<C-tab>'
+" let g:UltiSnipsJumpForwardTrigger='<C-tab>'
+" let g:UltiSnipsJumpBackwardTrigger='<C-s-tab>'
+" let g:UltiSnipsEditSplit='vertical'
 
 " Nerdtree -----------------------------------------------
 " Start automatically if no file specified or a folder is specified
