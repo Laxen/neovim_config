@@ -1,3 +1,8 @@
+" TODO
+" Python autocompletion
+" In-editor Pylint and PEP8
+" General clean up of unused plugins
+
 call plug#begin('~/.vim/plugged')
 
 " Themes
@@ -57,7 +62,8 @@ source ~/.config/nvim/cscope_maps.vim
 set cscoperelative "Use relative paths based on the location of cscope.out
 
 " General vim settings -----------------------------------------------
-syntax enable
+filetype plugin indent on
+syntax on
 set termguicolors
 tnoremap <Esc> <C-\><C-n>				"For escaping out of the terminal
 set number
@@ -67,23 +73,30 @@ set clipboard+=unnamedplus				"Copy to clipboard by default
 set tabstop=4 shiftwidth=4
 set nowrap
 set encoding=utf8						"Needed to show glyphs
-noremap <silent> <c-c> :noh<cr><esc>	"Remove search highlighting when hitting ctrl-c
-set diffopt=vertical                    "Vertical vimdiffs
+"Remove search highlighting when hitting esc
+noremap <silent> <Esc> :noh<cr>
+set diffopt=vertical,filler             "Vertical vimdiffs
 let mapleader = ","                     "Rebind leader to , instead of \
 
 " Align blocks of text and keep them selected
 vmap < <gv
 vmap > >gv
 
-filetype plugin indent on
+" Yank to the end of a string
+nmap ys yt"
+
+set backspace=indent,eol,start
 " show existing tab with 4 spaces width
 set tabstop=4
-" when indenting with '>', use 2 spaces width
-set shiftwidth=2
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
 " On pressing tab, insert 2 spaces
 set expandtab
-" Use max 80 columns
-set tw=80
+" Don't automatically break lines
+set tw=0
+
+"Search for text in visual mode using //
+vnoremap // y/\V<C-r>=escape(@",'/\')<CR><CR>
 
 " Theme -----------------------------------------------
 " Gruvbox
@@ -100,8 +113,8 @@ let g:airline_theme = 'material'
 let g:material_theme_style = 'palenight'
 colorscheme material
 
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%81v.\+/
+" highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" match OverLength /\%81v.\+/
 
 " Neater folding --------------------------------------
 function! NeatFoldText()
@@ -129,7 +142,7 @@ let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang'
 set completeopt-=preview                                		" Gets rid of the scratch pad thing
 set completeopt+=longest                                        " Doesn't select the first completion item
 set completeopt+=menuone                                        " Show menu even if there's only one item
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"        " Tab completion
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"        " Tab completion
 inoremap <expr> j pumvisible() ? "\<C-n>" : "j"                 " Use j as down in autocomplete box
 inoremap <expr> k pumvisible() ? "\<C-p>" : "k"                 " Use k as up in autocomplete box
 
@@ -137,7 +150,7 @@ inoremap <expr> k pumvisible() ? "\<C-p>" : "k"                 " Use k as up in
 " call neomake#configure#automake('nw', 750)
 
 " Ultisnips -----------------------------------------------
-" let g:UltiSnipsSnippetsDir='/home/alex/.vim/plugged/vim-snippets/UltiSnips'
+" let g:UltiSnipsSnippetsDir='/home/alexanga/.vim/plugged/vim-snippets/UltiSnips'
 " let g:UltiSnipsSnippetDirectories=['UltiSnips']
 " let g:UltiSnipsExpandTrigger='<C-tab>'
 " let g:UltiSnipsJumpForwardTrigger='<C-tab>'
@@ -157,16 +170,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 map <C-n> :NERDTreeToggle<CR>
 
 let NERDTreeShowHidden=1
-
-" LLDB -----------------------------------------------
-" nmap <M-b> <Plug>LLBreakSwitch
-
-" Custom cscope init
-" function! CSinit()
-"   !cscope -Rb
-"   cs add cscope.out
-" endfunction
-" command CSinit call CSinit()
 
 " Finds the parent 'sources' directory, cd's to it, builds cscope
 " cross-reference, removes all other cscope connections and adds the new one,
