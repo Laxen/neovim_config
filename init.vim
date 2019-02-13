@@ -14,15 +14,11 @@ Plug 'kaicataldo/material.vim'
 Plug 'vim-airline/vim-airline'
 
 " Autocompletion
-Plug 'Shougo/deoplete.nvim'
-Plug 'zchee/deoplete-clang'
+" Plug 'Shougo/deoplete.nvim'
+" Plug 'zchee/deoplete-clang'
 
 " Neomake - Async compilation and syntax checking
 " Plug 'neomake/neomake'
-
-" Better terminal
-" Commands - Term, VTerm
-Plug 'mklabs/split-term.vim'
 
 " Auto open brackets and quotes
 Plug 'jiangmiao/auto-pairs'
@@ -38,9 +34,6 @@ Plug 'tomtom/tcomment_vim'
 " Nerdtree - Nice directory visualizer
 Plug 'scrooloose/nerdtree'
 
-" LLDB debugger
-" Plug 'dbgx/lldb.nvim'
-
 " Git wrapper
 Plug 'tpope/vim-fugitive'
 
@@ -50,6 +43,9 @@ Plug 'dhruvasagar/vim-table-mode'
 " Ez window swapping
 " Keys - <leader>ww in window 1, same in window 2 to swap the windows
 Plug 'wesQ3/vim-windowswap'
+
+" Autocompletion for many languages
+Plug 'Valloric/YouCompleteMe'
 
 " Might want in the future
 " tpope/vim-surround For surrounding words with anything ("")
@@ -65,32 +61,33 @@ set cscoperelative "Use relative paths based on the location of cscope.out
 filetype plugin indent on
 syntax on
 set termguicolors
-tnoremap <Esc> <C-\><C-n>				"For escaping out of the terminal
+"For escaping out of the terminal
+tnoremap <Esc> <C-\><C-n>
 set number
-set norelativenumber
 set incsearch							"Start searching immediately
 set clipboard+=unnamedplus				"Copy to clipboard by default
-set tabstop=4 shiftwidth=4
 set nowrap
 set encoding=utf8						"Needed to show glyphs
 "Remove search highlighting when hitting esc
 noremap <silent> <Esc> :noh<cr>
 set diffopt=vertical,filler             "Vertical vimdiffs
-let mapleader = ","                     "Rebind leader to , instead of \
+let mapleader = " "                     "Rebind leader to space instead of \
 
 " Align blocks of text and keep them selected
 vmap < <gv
 vmap > >gv
-
 " Yank to the end of a string
 nmap ys yt"
+" Re-select the block after deleting a fold
+vmap zd zdgv
 
+" Make the backspace work like normal
 set backspace=indent,eol,start
-" show existing tab with 4 spaces width
+" Show existing tab with 4 spaces width
 set tabstop=4
-" when indenting with '>', use 4 spaces width
+" When indenting with '>', use 4 spaces width
 set shiftwidth=4
-" On pressing tab, insert 2 spaces
+" On pressing tab, insert spaces
 set expandtab
 " Don't automatically break lines
 set tw=0
@@ -133,18 +130,22 @@ highlight Folded guibg=base01 guifg=darkgrey
 autocmd BufWinLeave ?* mkview
 autocmd BufWinEnter ?* silent! loadview
 
-vmap zd zdgv
+" YouCompleteMe ------------------------------------------
+" leader+g Goes to definition or declaration
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" leader+leader+g does the same as above but in a vertical split
+map <leader><leader>g :vs \| YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Deoplete -----------------------------------------------
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
-let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang'
-set completeopt-=preview                                		" Gets rid of the scratch pad thing
-set completeopt+=longest                                        " Doesn't select the first completion item
-set completeopt+=menuone                                        " Show menu even if there's only one item
+" let g:deoplete#enable_at_startup = 1
+" let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
+" let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang'
+" set completeopt-=preview                                		" Gets rid of the scratch pad thing
+" set completeopt+=longest                                        " Doesn't select the first completion item
+" set completeopt+=menuone                                        " Show menu even if there's only one item
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"        " Tab completion
-inoremap <expr> j pumvisible() ? "\<C-n>" : "j"                 " Use j as down in autocomplete box
-inoremap <expr> k pumvisible() ? "\<C-p>" : "k"                 " Use k as up in autocomplete box
+" inoremap <expr> j pumvisible() ? "\<C-n>" : "j"                 " Use j as down in autocomplete box
+" inoremap <expr> k pumvisible() ? "\<C-p>" : "k"                 " Use k as up in autocomplete box
 
 " Neomake -----------------------------------------------
 " call neomake#configure#automake('nw', 750)
@@ -175,6 +176,7 @@ let NERDTreeShowHidden=1
 " cross-reference, removes all other cscope connections and adds the new one,
 " cd's back to previous directory
 " If 'sources' is not found does nothing
+" TODO: Remake this to work from the current working directory, or use something else instead of cscope...
 function! CS()
   let file = expand('%:p')
   let move = ""
