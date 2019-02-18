@@ -1,7 +1,5 @@
 " TODO
-" Python autocompletion
 " In-editor Pylint and PEP8
-" General clean up of unused plugins
 
 call plug#begin('~/.vim/plugged')
 
@@ -12,13 +10,6 @@ Plug 'kaicataldo/material.vim'
 
 " Airline
 Plug 'vim-airline/vim-airline'
-
-" Autocompletion
-" Plug 'Shougo/deoplete.nvim'
-" Plug 'zchee/deoplete-clang'
-
-" Neomake - Async compilation and syntax checking
-" Plug 'neomake/neomake'
 
 " Auto open brackets and quotes
 Plug 'jiangmiao/auto-pairs'
@@ -46,6 +37,9 @@ Plug 'wesQ3/vim-windowswap'
 
 " Autocompletion for many languages
 Plug 'Valloric/YouCompleteMe'
+
+" Fuzzy searching
+Plug 'kien/ctrlp.vim'
 
 " Might want in the future
 " tpope/vim-surround For surrounding words with anything ("")
