@@ -88,6 +88,8 @@ set tw=0
 
 "Search for text in visual mode using //
 vnoremap // y/\V<C-r>=escape(@",'/\')<CR><CR>
+" When searching with *, highlight without moving to next word
+nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
 " Theme -----------------------------------------------
 " Gruvbox
@@ -129,6 +131,15 @@ autocmd BufWinEnter ?* silent! loadview
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 " leader+leader+g does the same as above but in a vertical split
 map <leader><leader>g :vs \| YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" Add api-toolbox to YCM sys_path
+let g:ycm_python_sys_path = ["/home/alexanga/.atf/src/api-toolbox", 
+                           \ "/home/alexanga/.atf/src/atf-common",
+                           \ "/home/alexanga/.atf/src/atf-decorator"]
+let g:ycm_extra_conf_vim_data = [
+  \  'g:ycm_python_sys_path'
+  \]
+let g:ycm_global_ycm_extra_conf = '/home/alexanga/.config/nvim/ycm_global_extra_conf.py'
 
 " Deoplete -----------------------------------------------
 " let g:deoplete#enable_at_startup = 1
