@@ -131,6 +131,7 @@ autocmd BufWinEnter ?* silent! loadview
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 " leader+leader+g does the same as above but in a vertical split
 map <leader><leader>g :vs \| YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " Add api-toolbox to YCM sys_path
 let g:ycm_python_sys_path = ["/home/alexanga/.atf/src/api-toolbox", 
