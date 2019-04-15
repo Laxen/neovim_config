@@ -41,6 +41,9 @@ Plug 'Valloric/YouCompleteMe'
 " Fuzzy searching
 Plug 'kien/ctrlp.vim'
 
+" Grepper
+Plug 'mhinz/vim-grepper'
+
 " Might want in the future
 " tpope/vim-surround For surrounding words with anything ("")
 " airblade/vim-gitgutter For getting notifications which lines you've changed in a git repo
@@ -127,10 +130,21 @@ autocmd BufWinLeave ?* mkview
 autocmd BufWinEnter ?* silent! loadview
 
 " YouCompleteMe ------------------------------------------
-" leader+g Goes to definition or declaration
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+function! GoToDefinition()
+    let ret = execute("YcmCompleter GoToDefinitionElseDeclaration")
+    if ret =~ "ValueError: Still no compile flags."
+        execute("tag " . expand("<cword>"))
+    else
+        echo ret
+    endif
+endfunction
+
+" leader+g Goes to definition or declaration using YCM if possible, else using tags
+map <leader>g  :call GoToDefinition()<CR>
 " leader+leader+g does the same as above but in a vertical split
-map <leader><leader>g :vs \| YcmCompleter GoToDefinitionElseDeclaration<CR>
+map <leader><leader>g :vs \| GoToDefinition()<CR>
+" -------------
+
 let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " Add api-toolbox to YCM sys_path
@@ -141,6 +155,10 @@ let g:ycm_extra_conf_vim_data = [
   \  'g:ycm_python_sys_path'
   \]
 let g:ycm_global_ycm_extra_conf = '/home/alexanga/.config/nvim/ycm_global_extra_conf.py'
+
+" CtrlP --------------------------------------------------
+let g:ctrlp_max_files=0
+let g:ctrlp_max_depth=40
 
 " Deoplete -----------------------------------------------
 " let g:deoplete#enable_at_startup = 1
@@ -177,6 +195,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 map <C-n> :NERDTreeToggle<CR>
 
 let NERDTreeShowHidden=1
+
+" Vim Grepper -----------------------------------------
+nnoremap <leader>* :Grepper -tool ag -cword -noprompt<cr>
 
 " Finds the parent 'sources' directory, cd's to it, builds cscope
 " cross-reference, removes all other cscope connections and adds the new one,
