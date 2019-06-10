@@ -94,6 +94,9 @@ vnoremap // y/\V<C-r>=escape(@",'/\')<CR><CR>
 " When searching with *, highlight without moving to next word
 nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 
+" Press yfp to yank file path
+nmap yfp :let @+ = expand("%")<CR>
+
 " Theme -----------------------------------------------
 " Gruvbox
 " colorscheme gruvbox
@@ -142,7 +145,7 @@ endfunction
 " leader+g Goes to definition or declaration using YCM if possible, else using tags
 map <leader>g  :call GoToDefinition()<CR>
 " leader+leader+g does the same as above but in a vertical split
-map <leader><leader>g :vs \| GoToDefinition()<CR>
+map <leader><leader>g :vs \| call GoToDefinition()<CR>
 " -------------
 
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -284,3 +287,12 @@ function! Gpr()
   execute 'cd -'
 endfunction
 command! Gpr call Gpr()
+
+function! TabToggle()
+    if &expandtab
+        set noexpandtab
+    else
+        set expandtab
+    endif
+endfunction
+nmap <F12> mz:execute TabToggle()<CR>'z
