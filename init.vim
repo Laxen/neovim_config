@@ -10,6 +10,7 @@ Plug 'kaicataldo/material.vim'
 
 " Airline
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Auto open brackets and quotes
 Plug 'jiangmiao/auto-pairs'
@@ -24,6 +25,7 @@ Plug 'tomtom/tcomment_vim'
 
 " Nerdtree - Nice directory visualizer
 Plug 'scrooloose/nerdtree'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
 " Git wrapper
 Plug 'tpope/vim-fugitive'
@@ -108,9 +110,11 @@ nmap yfp :let @+ = expand("%")<CR>
 
 " Material
 set background=dark
-let g:airline_theme = 'material'
+let g:airline_theme = 'bubblegum'
 let g:material_theme_style = 'palenight'
 colorscheme material
+set cursorline
+highlight CursorLine guibg=#313E62
 
 " highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 " match OverLength /\%81v.\+/
@@ -191,13 +195,45 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 
-" Close if nerdtree is the only open windows
+" Close if nerdtree is the only open window
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Toggle with Ctrl-n
 map <C-n> :NERDTreeToggle<CR>
 
 let NERDTreeShowHidden=1
+
+" Nerdtree syntax highlight
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+
+let s:brown = "905532"
+let s:aqua =  "3AFFDB"
+let s:blue = "689FB6"
+let s:darkBlue = "44788E"
+let s:purple = "d090ff"
+let s:lightPurple = "db97c4"
+let s:red = "ff6b66"
+let s:beige = "F5C06F"
+let s:yellow = "F09F17"
+let s:orange = "ffce91"
+let s:lightOrange = "ffce91"
+let s:darkOrange = "bd9257"
+let s:pink = "CB6F6F"
+let s:salmon = "EE6E73"
+let s:green = "8FAA54"
+let s:lightGreen = "31B53E"
+let s:white = "FFFFFF"
+let s:rspec_red = 'FE405F'
+let s:git_orange = 'F54D27'
+
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['c'] = s:orange
+let g:NERDTreeExtensionHighlightColor['h'] = s:darkOrange
+
+let g:NERDTreeExactMatchHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExactMatchHighlightColor['Makefile'] = s:red " sets the color for .gitignore files
 
 " Vim Grepper -----------------------------------------
 nnoremap <leader>* :Grepper -tool ag -cword -noprompt<cr>
