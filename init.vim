@@ -135,7 +135,7 @@ autocmd BufWinEnter ?* silent! loadview
 " YouCompleteMe ------------------------------------------
 function! GoToDefinition()
     let ret = execute("YcmCompleter GoToDefinitionElseDeclaration")
-    if ret =~ "ValueError: Still no compile flags."
+    if ret =~ "ValueError"
         execute("tag " . expand("<cword>"))
     else
         echo ret
@@ -202,6 +202,32 @@ let NERDTreeShowHidden=1
 " Vim Grepper -----------------------------------------
 nnoremap <leader>* :Grepper -tool ag -cword -noprompt<cr>
 
+function! RecipeName()
+  let file = expand('%:p')
+  let move = ""
+  let head = "null"
+  let i = 0
+  while i < 100
+    let i += 1
+    let move .= ":h"
+	let prevhead = head
+    let head = fnamemodify(file, ":p" . move . ":t")
+
+    if head == "sources"
+      echohl None
+      let sources = fnamemodify(file, ":p" . move)
+	  let recipe = prevhead
+      echo "sources directory found, recipe name is " . recipe
+	  return recipe
+    elseif head == ""
+      echohl WarningMsg
+      echo "No sources directory found!"
+      echohl None
+      return ""
+    endif
+  endwhile
+endfunction
+
 " Finds the parent 'sources' directory, cd's to it, builds cscope
 " cross-reference, removes all other cscope connections and adds the new one,
 " cd's back to previous directory
@@ -242,29 +268,25 @@ command! CS call CS()
 
 " Run ffbuild for recipe that is being edited
 function! FFBuild()
-  let recipe = expand('%:p:h:t')
-  execute "!ffbuild " . recipe
+	let recipe = RecipeName()
+	if recipe != ""
+		execute "!ffbuild " . recipe
+	endif
 endfunction
 command! FFBuild call FFBuild()
 nmap <M-b> :FFBuild<CR>
-
-" Deploy current recipe using devtool to AXIS_TARGET_IP (NOT USED)
-function! DeployTarget()
-  if $AXIS_TARGET_IP == ""
-    echo "ERROR: AXIS_TARGET_IP not set"
-  else
-    let recipe = expand('%:p:h:t')
-    execute "!devtool deploy-target --no-check-space " . recipe . " root@" . $AXIS_TARGET_IP
-  endif
-endfunction
 
 " Deploy current recipe using ffbuild to AXIS_TARGET_IP
 function! Deploy()
   if $AXIS_TARGET_IP == ""
     echo "ERROR: AXIS_TARGET_IP not set"
   else
-    let recipe = expand('%:p:h:t')
-    execute "!ffbuild " . recipe . " --deploy root@" . $AXIS_TARGET_IP
+		let recipe = RecipeName()
+		echo recipe
+		if recipe != ""
+			" execute "!devtool deploy-target --no-check-space " . recipe . " root@" . $AXIS_TARGET_IP
+			execute "!ffbuild " . recipe . " --deploy " . $AXIS_TARGET_IP
+		endif
   endif
 endfunction
 command! Deploy call Deploy()
