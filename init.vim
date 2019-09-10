@@ -60,15 +60,14 @@ set cscoperelative "Use relative paths based on the location of cscope.out
 filetype plugin indent on
 syntax on
 set termguicolors
-"For escaping out of the terminal
-tnoremap <Esc> <C-\><C-n>
 set number
 set incsearch							"Start searching immediately
 set clipboard+=unnamedplus				"Copy to clipboard by default
 set nowrap
 set encoding=utf8						"Needed to show glyphs
 "Remove search highlighting when hitting esc
-noremap <silent> <Esc> :noh<cr>
+" <C-U> removes visual range that is otherwise passed if escaping out of a visual selection
+noremap <silent> <Esc> :<C-U>noh<cr>
 set diffopt=vertical,filler             "Vertical vimdiffs
 let mapleader = " "                     "Rebind leader to space instead of \
 
@@ -99,6 +98,9 @@ nnoremap * :let @/='\<<C-R>=expand("<cword>")<CR>\>'<CR>:set hls<CR>
 " Press yfp to yank file path
 nmap yfp :let @+ = expand("%")<CR>
 
+" Allow mouse to resize windows
+set mouse=a
+
 " Theme -----------------------------------------------
 " Gruvbox
 " colorscheme gruvbox
@@ -114,7 +116,7 @@ let g:airline_theme = 'bubblegum'
 let g:material_theme_style = 'palenight'
 colorscheme material
 set cursorline
-highlight CursorLine guibg=#313E62
+highlight CursorLine guibg=#2E3956
 
 " highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 " match OverLength /\%81v.\+/
