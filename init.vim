@@ -70,6 +70,7 @@ set encoding=utf8						"Needed to show glyphs
 noremap <silent> <Esc> :<C-U>noh<cr>
 set diffopt=vertical,filler             "Vertical vimdiffs
 let mapleader = " "                     "Rebind leader to space instead of \
+set list                                "Shows indent characters
 
 " Align blocks of text and keep them selected
 vmap < <gv
@@ -101,6 +102,10 @@ nmap yfp :let @+ = expand("%")<CR>
 " Allow mouse to resize windows
 set mouse=a
 
+" Window resizing
+nnoremap <silent> <Leader>h :vertical resize +10<CR>
+nnoremap <silent> <Leader>l :vertical resize -10<CR>
+
 " Theme -----------------------------------------------
 " Gruvbox
 " colorscheme gruvbox
@@ -117,6 +122,8 @@ let g:material_theme_style = 'palenight'
 colorscheme material
 set cursorline
 highlight CursorLine guibg=#2E3956
+" Visual select color
+highlight Visual guibg=#515094 guifg=reverse
 
 " highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 " match OverLength /\%81v.\+/
