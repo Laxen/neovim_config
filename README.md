@@ -1,3 +1,5 @@
+Clone this repo to `~/.config`.
+
 When setting up for the first time run this command to install Plugged
 ```
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
