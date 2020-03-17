@@ -250,30 +250,31 @@ let g:NERDTreeExactMatchHighlightColor['Makefile'] = s:red " sets the color for 
 " Vim Grepper -----------------------------------------
 nnoremap <leader>* :Grepper -tool ag -cword -noprompt<cr>
 
+" Finds the current Yocto recipe name for the file that is opened
 function! RecipeName()
-  let file = expand('%:p')
-  let move = ""
-  let head = "null"
-  let i = 0
-  while i < 100
-    let i += 1
-    let move .= ":h"
-	let prevhead = head
-    let head = fnamemodify(file, ":p" . move . ":t")
+    let file = expand('%:p')
+    let move = ""
+    let head = "null"
+    let i = 0
+    while i < 100
+        let i += 1
+        let move .= ":h"
+        let prevhead = head
+        let head = fnamemodify(file, ":p" . move . ":t")
 
-    if head == "sources"
-      echohl None
-      let sources = fnamemodify(file, ":p" . move)
-	  let recipe = prevhead
-      echo "sources directory found, recipe name is " . recipe
-	  return recipe
-    elseif head == ""
-      echohl WarningMsg
-      echo "No sources directory found!"
-      echohl None
-      return ""
-    endif
-  endwhile
+        if head == "sources"
+            echohl None
+            let sources = fnamemodify(file, ":p" . move)
+            let recipe = prevhead
+            echo "sources directory found, recipe name is " . recipe
+            return recipe
+        elseif head == ""
+            echohl WarningMsg
+            echo "No sources directory found!"
+            echohl None
+            return ""
+        endif
+    endwhile
 endfunction
 
 " Finds the parent 'sources' directory, cd's to it, builds cscope
@@ -282,63 +283,37 @@ endfunction
 " If 'sources' is not found does nothing
 " TODO: Remake this to work from the current working directory, or use something else instead of cscope...
 function! CS()
-  let file = expand('%:p')
-  let move = ""
-  let head = "null"
-  let i = 0
-  while i < 100
-    let i += 1
-    let move .= ":h"
-    let head = fnamemodify(file, ":p" . move . ":t")
+    let file = expand('%:p')
+    let move = ""
+    let head = "null"
+    let i = 0
+    while i < 100
+        let i += 1
+        let move .= ":h"
+        let head = fnamemodify(file, ":p" . move . ":t")
 
-    if head == "sources"
-      echohl None
-      let sources = fnamemodify(file, ":p" . move)
-      echo "sources directory found"
-      echo sources
-      echo
-      echo "Building cross-reference and adding connection to vim..."
-      execute 'cd ' . sources
-      !cscope -Rb
-      cs kill -1 " Remove all cscope connections
-      cs add cscope.out
-      execute 'cd -'
-      break
-    elseif head == ""
-      echohl WarningMsg
-      echo "No sources directory found!"
-      echohl None
-      break
-    endif
-  endwhile
+        if head == "sources"
+            echohl None
+            let sources = fnamemodify(file, ":p" . move)
+            echo "sources directory found"
+            echo sources
+            echo
+            echo "Building cross-reference and adding connection to vim..."
+            execute 'cd ' . sources
+            !cscope -Rb
+            cs kill -1 " Remove all cscope connections
+            cs add cscope.out
+            execute 'cd -'
+            break
+        elseif head == ""
+            echohl WarningMsg
+            echo "No sources directory found!"
+            echohl None
+            break
+        endif
+    endwhile
 endfunction
 command! CS call CS()
-
-" Run ffbuild for recipe that is being edited
-function! FFBuild()
-	let recipe = RecipeName()
-	if recipe != ""
-		execute "!ffbuild " . recipe
-	endif
-endfunction
-command! FFBuild call FFBuild()
-nmap <M-b> :FFBuild<CR>
-
-" Deploy current recipe using ffbuild to AXIS_TARGET_IP
-function! Deploy()
-  if $AXIS_TARGET_IP == ""
-    echo "ERROR: AXIS_TARGET_IP not set"
-  else
-		let recipe = RecipeName()
-		echo recipe
-		if recipe != ""
-			" execute "!devtool deploy-target --no-check-space " . recipe . " root@" . $AXIS_TARGET_IP
-			execute "!ffbuild " . recipe . " --deploy " . $AXIS_TARGET_IP
-		endif
-  endif
-endfunction
-command! Deploy call Deploy()
-nmap <M-d> :Deploy<CR>
 
 " Run gitk --all on folder where current open file is located
 function! Gk()
@@ -349,15 +324,7 @@ function! Gk()
 endfunction
 command! Gk call Gk()
 
-" Call git pull --rebase in folder where current open file is located
-function! Gpr()
-  let dir = expand('%:p:h')
-  execute 'cd ' . dir
-  execute '!git pull --rebase'
-  execute 'cd -'
-endfunction
-command! Gpr call Gpr()
-
+" Toggle between tabs and spaces
 function! TabToggle()
     if &expandtab
         set noexpandtab
@@ -366,3 +333,9 @@ function! TabToggle()
     endif
 endfunction
 nmap <F12> mz:execute TabToggle()<CR>'z
+
+" Source in init_private.vim
+let init_private = expand('%:p:h') . '/init_private.vim'
+if filereadable(init_private)
+    exec 'source' . init_private
+endif
