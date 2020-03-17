@@ -55,19 +55,15 @@ Plug 'christoomey/vim-tmux-navigator'
 
 call plug#end()
 
-" CScope --------------------------------------------
-source ~/.config/nvim/cscope_maps.vim
-set cscoperelative "Use relative paths based on the location of cscope.out
-
 " General vim settings -----------------------------------------------
 filetype plugin indent on
 syntax on
 set termguicolors
 set number
-set incsearch							"Start searching immediately
-set clipboard+=unnamedplus				"Copy to clipboard by default
+set incsearch                           "Start searching immediately
+set clipboard+=unnamedplus              "Copy to clipboard by default
 set nowrap
-set encoding=utf8						"Needed to show glyphs
+set encoding=utf8                       "Needed to show glyphs
 "Remove search highlighting when hitting esc
 " <C-U> removes visual range that is otherwise passed if escaping out of a visual selection
 noremap <silent> <Esc> :<C-U>noh<cr>
@@ -183,7 +179,7 @@ let g:ctrlp_max_depth=40
 " let g:deoplete#enable_at_startup = 1
 " let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
 " let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang'
-" set completeopt-=preview                                		" Gets rid of the scratch pad thing
+" set completeopt-=preview                                        " Gets rid of the scratch pad thing
 " set completeopt+=longest                                        " Doesn't select the first completion item
 " set completeopt+=menuone                                        " Show menu even if there's only one item
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"        " Tab completion
