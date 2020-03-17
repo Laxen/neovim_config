@@ -46,6 +46,9 @@ Plug 'kien/ctrlp.vim'
 " Grepper
 Plug 'mhinz/vim-grepper'
 
+" Tmux Navigator
+Plug 'christoomey/vim-tmux-navigator'
+
 " Might want in the future
 " tpope/vim-surround For surrounding words with anything ("")
 " airblade/vim-gitgutter For getting notifications which lines you've changed in a git repo
